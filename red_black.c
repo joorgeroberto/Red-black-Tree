@@ -57,25 +57,17 @@ noh* floor(noh* x, char key) {
 		return x;
 }
 
+
+//Atualiza o pai de todas as arvores.
 void atualizaPai(noh* pai, noh* atual) {
 		if(atual != NULL && pai != NULL) {
-			if(atual->key == 'P') { 
-				printf("[Antes] Chave: %c e Pai: %c\n",atual->key,atual->pai->key);
-				if(pai->key != atual->pai->key) {
-					pai = atual->pai;
-					printf("[Depois] Chave: %c e Pai: %c\n",atual->key,atual->pai->key);
-				}
-			}
-			else
-				if(pai->key != atual->pai->key)
-					pai = atual->pai;
+			if(pai->key != atual->pai->key)
+				atual->pai = pai;
 		}
 		if(atual->esq != NULL)
 			atualizaPai(atual, atual->esq);
 		if(atual->dir != NULL)
 			atualizaPai(atual, atual->dir);
-	
-
 }
 
 //Verifica o campo N onde fica registrado o número de nós da subárvore cuja raiz é x. 
@@ -102,12 +94,14 @@ bool isRed(noh* x) {
 	}
 }
 
+//Muda a cor dos filhos de um no h.
 void flipColors(noh* h) {
 	h->cor = 'R';
 	h->esq->cor = 'B';
 	h->dir->cor = 'B';
 }
 
+//Rotaciona uma sub-arvore para a direita e atualiza o valor do pai.
 noh* rotateRight(noh* h) {
 	noh* x = h->esq;
 	h->esq = x->dir;
@@ -121,6 +115,7 @@ noh* rotateRight(noh* h) {
 	return x;
 }
 
+//Rotaciona uma sub-arvore para a esquerda e atualiza o valor do pai.
 noh* rotateLeft(noh* h) {
 	noh* x = h->dir;
     h->dir = x->esq;
@@ -202,17 +197,10 @@ void mostrar (noh * r) {
 	if (r == NULL) 
 		printf("-\n");
 	if (r != NULL) {
-		if(r->pai != NULL){
-			if(r->cor == 'B')
-				printf("%c | pai: %c\n", r->key, r->pai->key);
-			else
-				printf("%c<*> | pai: %c\n", r->key, r->pai->key);
-		}
+		if(r->cor == 'B')
+			printf("%c\n", r->key);
 		else
-			if(r->cor == 'B')
-				printf("%c\n", r->key);
-			else
-				printf("%c<*>\n", r->key);
+			printf("%c<*>\n", r->key);
 
 		contador++;	  
 		
